@@ -1,4 +1,4 @@
-package com.mes.common;
+package com.mes.beans;
 
 import javax.validation.constraints.Min;
 
@@ -11,12 +11,12 @@ public class PageQuery {
 
     @Getter
     @Setter
-    @Min(value = 1, message = "当前页码不合�?")
+    @Min(value = 1, message = "当前页码不合�?")
     private int pageNo = 1;
 
     @Getter
     @Setter
-    @Min(value = 1, message = "每页展示数量不合�?")
+    @Min(value = 1, message = "每页展示数量不合�?")
     private int pageSize = 10;
 
     @Setter

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.mes.common.PageQuery;
+import com.mes.beans.PageQuery;
 import com.mes.dto.SearchOrderDto;
 import com.mes.model.MesOrder;
 

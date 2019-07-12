@@ -9,7 +9,7 @@
 <%@ include file="/common/backend_common.jsp" %>
 <%@ include file="/common/page.jsp" %>
 <%@ include file="/template/orderBatchListTemplate.jsp" %>
- 
+<script src="orderBatch.js"></script> 
 <%-- <jsp:include page="orderJs.jsp" />
  --%>
 </head>
@@ -41,20 +41,21 @@
 										name="dynamic-table_length" aria-controls="dynamic-table"
 										class="form-control input-sm">
 											<option value="10">10</option>
+											<option value="5">5</option>
 									</select> 条记录
 									</label> <input id="keyword" type="search" name="keyword"
 										class="form-control input-sm" placeholder="关键词"
 										aria-controls="dynamic-table"> <label>
 										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;是否启用 
 									<input type="hidden" name="search_status" id="search_status" value="0"/>
-									<!-- 
+									
 									<select
 										id="search_status" name="search_status"
 										aria-controls="dynamic-table" class="form-control input-sm">
 											<option value="0">未启动</option>
 											<option value="1">已启动</option>
 									</select>
-									-->
+								
 									</label> <input id="fromTime" type="search" name="fromTime"
 										class="form-control input-sm datepicker" placeholder="开始时间"
 										aria-controls="dynamic-table"> ~ <input id="toTime"
@@ -103,14 +104,14 @@
 								</tr>
 							</thead>
 							<tbody id="orderList"></tbody>
-						</table> 
+						</table>
 						<div class="row" id="orderPage"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-<%@ include file="orderBatchForm.jsp" %>
-<script type="text/javascript" src="orderBatch.js"></script>
+	<%@ include file="orderUpdateForm.jsp" %>
+	<%@ include file="orderBatchForm.jsp" %>
 </body>
 </html>

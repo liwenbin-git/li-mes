@@ -7,15 +7,21 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
+import com.mes.beans.PageQuery;
+import com.mes.beans.PageResult;
 import com.mes.dao.MesOrderCustomerMapper;
 import com.mes.dao.MesOrderMapper;
+import com.mes.dto.SearchOrderDto;
+import com.mes.exception.ParamException;
 import com.mes.exception.SysMineException;
 import com.mes.model.MesOrder;
 import com.mes.param.MesOrderVo;
+import com.mes.param.SearchOrderParam;
 import com.mes.util.BeanValidator;
 import com.mes.util.MyStringUtils;
 
@@ -34,78 +40,6 @@ public class OrderService {
 	// 一开始就定义一个id生成器
 	private IdGenerator ig = new IdGenerator();
 
-//	public void batchStart(String ids) {
-//		// 144&143--order(id)
-//		if (ids != null && ids.length() > 0) {
-//			// 批量处理的sqlSession代理
-//			String[] idArray = ids.split("&");
-//			mesOrderCustomerMapper.batchStart(idArray);
-//			// 批量启动待执行计划
-//			planService.startPlansByOrderIds(idArray);
-//		}
-//	}
-
-	// 修改数据
-//	public void update(MesOrderVo mesOrderVo) {
-//		BeanValidator.check(mesOrderVo);
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//		MesOrder before = mesOrderMapper.selectByPrimaryKey(mesOrderVo.getId());
-//		Preconditions.checkNotNull(before, "待更新的材料不存在");
-//		try {
-//			MesOrder after = MesOrder.builder().id(mesOrderVo.getId())
-//					.orderClientname(mesOrderVo.getOrderClientname())//
-//					.orderProductname(mesOrderVo.getOrderProductname()).orderContractid(mesOrderVo.getOrderContractid())//
-//					.orderImgid(mesOrderVo.getOrderImgid()).orderMaterialname(mesOrderVo.getOrderMaterialname())
-//					.orderCometime(MyStringUtils.string2Date(mesOrderVo.getComeTime(), null))//
-//					.orderCommittime(MyStringUtils.string2Date(mesOrderVo.getCommitTime(), null))
-//					.orderInventorystatus(mesOrderVo.getOrderInventorystatus()).orderStatus(mesOrderVo.getOrderStatus())//
-//					.orderMaterialsource(mesOrderVo.getOrderMaterialsource())
-//					.orderHurrystatus(mesOrderVo.getOrderHurrystatus()).orderStatus(mesOrderVo.getOrderStatus())
-//					.orderRemark(mesOrderVo.getOrderRemark()).build();
-//
-//			// 设置用户的登录信息
-//			// TODO
-//			after.setOrderOperator("tom");
-//			after.setOrderOperateIp("127.0.0.1");
-//			after.setOrderOperateTime(new Date());
-//			mesOrderMapper.updateByPrimaryKeySelective(after);
-//		} catch (Exception e) {
-//			throw new SysMineException("更改过程有问题");
-//		}
-//	}
-
-	// 增加单个用户
-	// public void addOrder(MesOrder mesOrder) 这里直接传入mesOrder是有问题的，
-	// 问题是controller调用service，controller能拿到的数据模型只能是vo，所以controller传给service
-	// 的数据模型一定是vo类型
-//	public void addOrder(MesOrderVo mesOrderVo) {
-//		// 判断一下mesOrder的值是否正确
-//		// 后台的数据校验 BeanValidator
-//		BeanValidator.check(mesOrderVo);// beanvalidator是什么，怎么用
-//		try {
-//			// 将vo转换为po
-//			MesOrder mesOrder = MesOrder.builder().orderId(mesOrderVo.getOrderId())
-//					.orderClientname(mesOrderVo.getOrderClientname())//
-//					.orderProductname(mesOrderVo.getOrderProductname()).orderContractid(mesOrderVo.getOrderContractid())//
-//					.orderImgid(mesOrderVo.getOrderImgid()).orderMaterialname(mesOrderVo.getOrderMaterialname())
-//					.orderCometime(MyStringUtils.string2Date(mesOrderVo.getComeTime(), null))//
-//					.orderCommittime(MyStringUtils.string2Date(mesOrderVo.getCommitTime(), null))
-//					.orderInventorystatus(mesOrderVo.getOrderInventorystatus()).orderStatus(mesOrderVo.getOrderStatus())//
-//					.orderMaterialsource(mesOrderVo.getOrderMaterialsource())
-//					.orderHurrystatus(mesOrderVo.getOrderHurrystatus()).orderStatus(mesOrderVo.getOrderStatus())
-//					.orderRemark(mesOrderVo.getOrderRemark()).build();
-//
-//			// 设置用户的登录信息
-//			// TODO
-//			mesOrder.setOrderOperator("tom");
-//			mesOrder.setOrderOperateIp("127.0.0.1");
-//			mesOrder.setOrderOperateTime(new Date());
-//			mesOrderMapper.insertSelective(mesOrder);
-//			// mesOrderCustomerMapper.addOrder(mesOrder);//数据层交互的数据类型又是po，传入vo是不对的
-//		} catch (Exception e) {
-//			throw new SysMineException(e + "添加单个订单出了问题");
-//		}
-//	}
 
 	public void orderBatchInserts(MesOrderVo mesOrderVo) {
 		// 数据校验
@@ -134,6 +68,7 @@ public class OrderService {
 				// 设置用户的登录信息
 				// TODO
 				mesOrderBatchMapper.insertSelective(mesOrder);
+				//
 			} catch (Exception e) {
 				throw new SysMineException("创建过程有问题");
 			}
@@ -266,6 +201,77 @@ public class OrderService {
 		@Override
 		public String toString() {
 			return "IdGenerator [ids=" + ids + "]";
+		}
+	}
+
+	public PageResult<MesOrder> searchPageList(SearchOrderParam param, PageQuery page) {
+		// TODO Auto-generated method stub
+		//校验page是否为空
+		BeanValidator.check(page);
+		//将param中字段传入dto层进行数据交互
+		SearchOrderDto dto= new SearchOrderDto();
+		//判断param中的 数据是否为空
+		if(StringUtils.isNotBlank(param.getKeyword())) {
+			dto.setKeyword("%"+param.getKeyword()+"%");
+		}
+		if(StringUtils.isNotBlank(param.getSearch_status())) {
+			dto.setSearch_status(Integer.parseInt(param.getSearch_status()));
+		}
+		try {
+			//生成日期格式
+			SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
+			if(StringUtils.isNotBlank(param.getFromTime())) {
+				dto.setFromTime(dateFormat.parse(param.getFromTime()));
+			}
+			if(StringUtils.isNotBlank(param.getToTime())) {
+				dto.setToTime(dateFormat.parse(param.getToTime()));
+				
+			}
+		} catch (Exception e) {
+			throw new ParamException("传入的日期格式有问题，正确的格式为：yyyy-MM-dd");
+		}
+		int count = mesOrderCustomerMapper.countBySearchDto(dto);
+		if(count>0) {
+			List<MesOrder> orderList = mesOrderCustomerMapper.getPageListBySearchDto(dto, page);
+			return PageResult.<MesOrder>builder().total(count).data(orderList).build();
+		}
+		return PageResult.<MesOrder>builder().build();
+	}
+//修改
+	public void update(MesOrderVo mesOrderVo) {
+		
+		//校验要修改的数据是否为空
+		BeanValidator.check(mesOrderVo);
+		//制定日期格式
+		SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+		//通过id拿到要修改数据 
+		MesOrder before= mesOrderMapper.selectByPrimaryKey(mesOrderVo.getId());
+		//判断材料是否为空
+		Preconditions.checkNotNull(before,"待更新的材料不存在");
+		try {
+			MesOrder after=MesOrder.builder().id(mesOrderVo.getId())
+					.orderClientname(mesOrderVo.getOrderClientname())//
+					.orderProductname(mesOrderVo.getOrderProductname()).orderContractid(mesOrderVo.getOrderContractid())//
+					.orderImgid(mesOrderVo.getOrderImgid()).orderMaterialname(mesOrderVo.getOrderMaterialname())
+					.orderCometime(MyStringUtils.string2Date(mesOrderVo.getComeTime(), null))//
+					.orderCommittime(MyStringUtils.string2Date(mesOrderVo.getCommitTime(), null))
+					.orderInventorystatus(mesOrderVo.getOrderInventorystatus()).orderStatus(mesOrderVo.getOrderStatus())//
+					.orderMaterialsource(mesOrderVo.getOrderMaterialsource())
+					.orderHurrystatus(mesOrderVo.getOrderHurrystatus()).orderStatus(mesOrderVo.getOrderStatus())
+					.orderRemark(mesOrderVo.getOrderRemark()).build();
+			//数据库更新数据
+			mesOrderMapper.updateByPrimaryKeySelective(after);
+			
+		} catch (Exception e) {
+			throw new SysMineException("更新过程有问题");
+		}
+	}
+//批量启动订单
+	public void batchStart(String ids) {
+		if(null != ids && ids.length()>0) {
+			//批量处理的sqlSession代理
+			String[] idArray = ids.split("&");
+			mesOrderCustomerMapper.batchStart(idArray);
 		}
 	}
 
