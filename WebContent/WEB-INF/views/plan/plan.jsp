@@ -9,7 +9,7 @@
 <%@ include file="/common/backend_common.jsp" %>
 <%@ include file="/common/page.jsp" %>
 <%@ include file="/template/planListTemplate.jsp" %>
-<script src="plan.js"></script> 
+<script type="text/javascript" src="plan.js"></script>
 </head>
 <body class="no-skin" youdao="bind" style="background: white">
 	<input id="gritter-light" checked="" type="checkbox"
@@ -142,7 +142,7 @@
 			</div>
 		</div>
 	</div>
-	<%-- <%@ include file="planForm/planUpdateForm.jsp" %>
-	<%@ include file="planForm/planForm.jsp" %> --%>
+	<%@ include file="planUpdateForm.jsp" %>
+	<%@ include file="planForm.jsp" %>
 </body>
 </html>

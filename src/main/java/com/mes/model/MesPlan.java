@@ -2,6 +2,15 @@ package com.mes.model;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class MesPlan {
     private Integer id;
 
@@ -232,4 +241,5 @@ public class MesPlan {
     public void setPlanOperateIp(String planOperateIp) {
         this.planOperateIp = planOperateIp == null ? null : planOperateIp.trim();
     }
+    
 }

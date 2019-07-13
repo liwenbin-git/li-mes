@@ -22,7 +22,9 @@ public class PageQuery {
     @Setter
     private int offset;
 
-    public int getOffset() {
-        return (pageNo - 1) * pageSize;
-    }
+	public int getOffset() {
+		return (pageNo - 1) * pageSize;
+	}
+
+    
 }

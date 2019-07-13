@@ -34,8 +34,8 @@ public class OrderService {
 	private MesOrderCustomerMapper mesOrderCustomerMapper;
 	@Resource
 	private SqlSession sqlSession;
-//	@Resource
-//	private PlanService planService;
+	@Resource
+	private PlanService planService;
 
 	// 一开始就定义一个id生成器
 	private IdGenerator ig = new IdGenerator();
@@ -67,6 +67,9 @@ public class OrderService {
 
 				// 设置用户的登录信息
 				// TODO
+				if(mesOrder.getOrderStatus()==1) {
+					planService.prePlan(mesOrder);
+				}
 				mesOrderBatchMapper.insertSelective(mesOrder);
 				//
 			} catch (Exception e) {
@@ -230,6 +233,7 @@ public class OrderService {
 		} catch (Exception e) {
 			throw new ParamException("传入的日期格式有问题，正确的格式为：yyyy-MM-dd");
 		}
+		//获得订单的总数
 		int count = mesOrderCustomerMapper.countBySearchDto(dto);
 		if(count>0) {
 			List<MesOrder> orderList = mesOrderCustomerMapper.getPageListBySearchDto(dto, page);
@@ -272,6 +276,8 @@ public class OrderService {
 			//批量处理的sqlSession代理
 			String[] idArray = ids.split("&");
 			mesOrderCustomerMapper.batchStart(idArray);
+			//批量启动待执行计划
+			planService.startPlanByOrderIds(idArray);
 		}
 	}
 
