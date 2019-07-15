@@ -80,7 +80,7 @@
 					<td><input id="input-productRemark" type="text" name="productRemark"
 						value="" class="text ui-widget-content ui-corner-all"></td>
 				</tr>
-				<tr>
+				
 				<tr>
 					<td><label for="count">批量生成个数</label></td>
 					<td><input id="input-count" type="number" name="count"
