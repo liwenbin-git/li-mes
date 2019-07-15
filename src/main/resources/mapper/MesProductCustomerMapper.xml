@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mes.dao.MesProductCustomerMapper" >
+  <resultMap id="BaseResultMap" type="com.mes.model.MesProduct" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="p_id" property="pId" jdbcType="INTEGER" />
+    <result column="product_id" property="productId" jdbcType="VARCHAR" />
+    <result column="product_orderid" property="productOrderid" jdbcType="INTEGER" />
+    <result column="product_planid" property="productPlanid" jdbcType="INTEGER" />
+    <result column="product_targetweight" property="productTargetweight" jdbcType="REAL" />
+    <result column="product_realweight" property="productRealweight" jdbcType="REAL" />
+    <result column="product_leftweight" property="productLeftweight" jdbcType="REAL" />
+    <result column="product_bakweight" property="productBakweight" jdbcType="REAL" />
+    <result column="product_irontype" property="productIrontype" jdbcType="VARCHAR" />
+    <result column="product_irontypeweight" property="productIrontypeweight" jdbcType="REAL" />
+    <result column="product_materialname" property="productMaterialname" jdbcType="VARCHAR" />
+    <result column="product_imgid" property="productImgid" jdbcType="VARCHAR" />
+    <result column="product_materialsource" property="productMaterialsource" jdbcType="VARCHAR" />
+    <result column="product_status" property="productStatus" jdbcType="INTEGER" />
+    <result column="product_remark" property="productRemark" jdbcType="VARCHAR" />
+    <result column="product_operator" property="productOperator" jdbcType="VARCHAR" />
+    <result column="product_operate_time" property="productOperateTime" jdbcType="TIMESTAMP" />
+    <result column="product_operate_ip" property="productOperateIp" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, p_id, product_id, product_orderid, product_planid, product_targetweight, product_realweight, 
+    product_leftweight, product_bakweight, product_irontype, product_irontypeweight, 
+    product_materialname, product_imgid, product_materialsource, product_status, product_remark, 
+    product_operator, product_operate_time, product_operate_ip
+  </sql>
+  <select id="getProductCount" resultType="long">
+	  SELECT
+	  COUNT( 1 )
+	  FROM
+	  mes_product
+  </select>
+  <select id="countBySearchDto" parameterType="map" resultType="int">
+  	SELECT
+  	COUNT(1)
+  	FROM
+  	mes_product
+  	<include refid="queryConditions"/>
+  </select>
+  
+  <!-- 分页 -->
+  <select id="getPageListBySearchDto" parameterType="map" resultMap="BaseResultMap">
+  		SELECT 
+  		<include refid="Base_Column_List"/>
+  		FROM mes_product
+  		<include refid="queryConditions"/>
+  		ORDER BY id DESC
+  		limit #{page.offset}, #{page.pageSize}
+  </select>
+  <sql id="queryConditions">
+  		<where>
+  			<if test="dto.search_status !=null">
+  				AND product_status=#{dto.search_status}
+  			</if>
+  			<if test="dto.keyword !=null and dto.keyword !=''">
+  				AND ((product_id like #{dto.keyword}) or (product_materialname like #{dto.keyword}) or 
+  				(product_materialsource like#{dto.keyword}) or (product_imgid like #{dto.keyword})
+  				 or (product_irontype like #{dto.keyword}))
+  			</if>
+  		</where>
+  </sql>
+  </mapper>

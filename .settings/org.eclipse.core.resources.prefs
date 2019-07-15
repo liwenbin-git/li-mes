@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/views/product/productInsert.jsp=UTF-8
 encoding//src/main/java/com/mes/beans/PageQuery.java=UTF-8
 encoding//src/main/java/com/mes/dao/MesOrderCustomerMapper.java=UTF-8
 encoding//src/main/java/com/mes/param/MesOrderVo.java=UTF-8

@@ -1,12 +1,18 @@
 package com.mes.param;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @ToString
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class MesPlanVo {
 
 	private Integer id;// 这个不需要校验，自定auto生成
