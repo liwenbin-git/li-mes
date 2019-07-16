@@ -14,6 +14,7 @@
 	<td>{{productIrontype}}</td>
 	<td>{{productIrontypeweight}}</td>
 	<td>{{#bold}}{{showStatus}}{{/bold}}</td> 
+	<td>{{furnacenumber}}</td>
 	<td>{{productRemark}}</td>
 	<td>
 		<div class="hidden-sm hidden-xs action-buttons">

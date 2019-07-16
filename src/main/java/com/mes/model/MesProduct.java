@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -47,6 +48,8 @@ public class MesProduct {
     private Date productOperateTime;
 
     private String productOperateIp;
+
+    private String furnacenumber;
 
     public Integer getId() {
         return id;
@@ -198,5 +201,13 @@ public class MesProduct {
 
     public void setProductOperateIp(String productOperateIp) {
         this.productOperateIp = productOperateIp == null ? null : productOperateIp.trim();
+    }
+
+    public String getFurnacenumber() {
+        return furnacenumber;
+    }
+
+    public void setFurnacenumber(String furnacenumber) {
+        this.furnacenumber = furnacenumber == null ? null : furnacenumber.trim();
     }
 }

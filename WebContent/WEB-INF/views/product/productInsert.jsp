@@ -80,12 +80,15 @@
 					<td><input id="input-productRemark" type="text" name="productRemark"
 						value="" class="text ui-widget-content ui-corner-all"></td>
 				</tr>
-				
-				<tr>
-					<td><label for="count">批量生成个数</label></td>
+				<tr><td><label for="furnacenumber">炉号</label></td>
+					<td><input id="input-furnacenumber" type="text" name="furnacenumber"
+						value="" class="text ui-widget-content ui-corner-all"></td>
+						<td><label for="count">批量生成个数</label></td>
 					<td><input id="input-count" type="number" name="count"
 						value="" class="text ui-widget-content ui-corner-all"></td>
-						<td><label >生成材料</label></td>
+				</tr>
+				<tr>
+					<td><label >生成材料</label></td>
 					<td><button class="btn btn-info fa fa-check batchInsert-btn"
 					style="margin-bottom: 6px;" type="button">点击按钮</button></td>
 				</tr>

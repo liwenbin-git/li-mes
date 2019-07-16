@@ -99,7 +99,9 @@
 										colspan="1">锭型</th>
 									<th tabindex="0" aria-controls="dynamic-table" rowspan="1"
 										colspan="1">状态</th>
-										<th tabindex="0" aria-controls="dynamic-table" rowspan="1"
+									<th tabindex="0" aria-controls="dynamic-table" rowspan="1"
+										colspan="1">炉号</th>
+									<th tabindex="0" aria-controls="dynamic-table" rowspan="1"
 										colspan="1">备注</th>
 									<th class="sorting_disabled" rowspan="1" colspan="1"
 										aria-label="">修改</th>

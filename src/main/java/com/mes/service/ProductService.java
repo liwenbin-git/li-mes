@@ -55,7 +55,8 @@ public class ProductService {
 						.productIrontypeweight(mesProductVo.getProductIrontypeweight()).productMaterialname(mesProductVo.getProductMaterialname())
 						.productImgid(mesProductVo.getProductImgid()).productStatus(mesProductVo.getProductStatus())
 						.productRemark(mesProductVo.getProductRemark()).productOperator(mesProductVo.getProductOperator())
-						.productOperateTime(mesProductVo.getProductOperateTime()).productOperateIp(mesProductVo.getProductOperateIp()).build();
+						.productOperateTime(mesProductVo.getProductOperateTime()).productOperateIp(mesProductVo.getProductOperateIp())
+						.furnacenumber(mesProductVo.getFurnacenumber()).build();
 		
 				
 			mesProductMapper.insertSelective(mesProduct);
@@ -234,7 +235,7 @@ public class ProductService {
 		product.setProductIrontype(mesProductVo.getProductIrontype());
 		product.setProductIrontypeweight(mesProductVo.getProductIrontypeweight());
 		product.setProductRemark(mesProductVo.getProductRemark());	
-		
+		product.setFurnacenumber(mesProductVo.getFurnacenumber());
 		
 	    mesProductMapper.updateByPrimaryKeySelective(product);
 		
