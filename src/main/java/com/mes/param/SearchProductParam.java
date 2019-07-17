@@ -18,7 +18,7 @@ public class SearchProductParam {
 	
 	private String keyword;
 	
-	private String search_status ;
+	private Integer search_status ;
 	
 	private String search_msource;
 }

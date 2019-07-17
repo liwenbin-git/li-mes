@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.mes.beans.PageQuery;
 import com.mes.beans.PageResult;
 import com.mes.common.JsonData;
+import com.mes.dto.ProductDto;
 import com.mes.model.MesProduct;
 import com.mes.param.MesProductVo;
 import com.mes.param.SearchProductParam;
@@ -43,6 +44,11 @@ public class MesProductController {
 	public String productIron() {
 		return FPATH+"/productIron";
 	}
+	//材料绑定页面
+	@RequestMapping("/productBindList.page")
+	public String productBindList() {
+		return FPATH+"/productBindList";
+	}
 	//添加材料
 	@RequestMapping("/insert.json")
 	//@ResponseBody
@@ -57,6 +63,14 @@ public class MesProductController {
 	public JsonData productPageList(SearchProductParam param,PageQuery page) {
 		PageResult<MesProduct> pr=(PageResult<MesProduct>) productService.searchPageList(param,page);
 		return JsonData.success(pr);
+	}
+	//材料绑定分页
+	@RequestMapping("/productBindList.json")
+	@ResponseBody
+	public JsonData prooductBindList(SearchProductParam param,PageQuery page) {
+		PageResult<ProductDto> pr=(PageResult<ProductDto>) productService.searchPageBindList(param,page);
+		return JsonData.success(pr);
+		
 	}
 	
 	//修改数据

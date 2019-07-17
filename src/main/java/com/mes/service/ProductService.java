@@ -16,6 +16,7 @@ import com.mes.beans.PageQuery;
 import com.mes.beans.PageResult;
 import com.mes.dao.MesProductCustomerMapper;
 import com.mes.dao.MesProductMapper;
+import com.mes.dto.ProductDto;
 import com.mes.dto.SearchProductDto;
 import com.mes.exception.SysMineException;
 import com.mes.model.MesProduct;
@@ -51,7 +52,7 @@ public class ProductService {
 						.pId(mesProductVo.getPId()).productOrderid(mesProductVo.getProductOrderid())
 						.productPlanid(mesProductVo.getProductPlanid()).productTargetweight(mesProductVo.getProductTargetweight())
 						.productRealweight(mesProductVo.getProductRealweight()).productLeftweight(mesProductVo.getProductLeftweight())
-						.productBakweight(mesProductVo.getProductBakweight()).productIrontype(mesProductVo.getProductIrontype())
+						.productBakweight(mesProductVo.getProductLeftweight()).productIrontype(mesProductVo.getProductIrontype())
 						.productIrontypeweight(mesProductVo.getProductIrontypeweight()).productMaterialname(mesProductVo.getProductMaterialname())
 						.productImgid(mesProductVo.getProductImgid()).productStatus(mesProductVo.getProductStatus())
 						.productRemark(mesProductVo.getProductRemark()).productOperator(mesProductVo.getProductOperator())
@@ -203,8 +204,8 @@ public class ProductService {
 		if(StringUtils.isNotBlank(param.getSearch_msource())) {
 			dto.setSearch_msource(param.getSearch_msource());
 		}
-		if(StringUtils.isNotBlank(param.getSearch_status())) {
-			dto.setSearch_status(Integer.parseInt(param.getSearch_status()));
+		if (param.getSearch_status() != null) {
+			dto.setSearch_status(param.getSearch_status());
 		}
 		int count = mesProductCustomerMapper.countBySearchDto(dto);
 		if(count>0) {
@@ -243,6 +244,33 @@ public class ProductService {
 		String[] idsArray=ids.split("&");
 		mesProductCustomerMapper.batchStart(idsArray);
 	}
+	}
+	//绑定页面分页
+	public PageResult<ProductDto> searchPageBindList(SearchProductParam param, PageQuery page) {
+		// TODO Auto-generated method stub
+		//校验
+		BeanValidator.check(page);
+		SearchProductDto dto = new SearchProductDto();
+		if(StringUtils.isNotBlank(param.getKeyword())) {
+			dto.setKeyword("%"+param.getKeyword()+"%");
+		}
+		if(StringUtils.isNotBlank(param.getSearch_msource())) {
+			dto.setSearch_msource(param.getSearch_msource());
+		}
+		if(param.getSearch_status() !=null) {
+			dto.setSearch_status(param.getSearch_status());
+		}
+		
+		//得到数据库中总条数
+		int counts=mesProductCustomerMapper.countBySearchBindListDto(dto);
+		
+		if(counts>0) {
+			List<ProductDto> productList=mesProductCustomerMapper.getPageBindListBySearchDto(dto,page);
+			return PageResult.<ProductDto>builder().total(counts).data(productList).build();
+		}
+		return PageResult.<ProductDto>builder().build();
+		
+		
 	}
 
 }

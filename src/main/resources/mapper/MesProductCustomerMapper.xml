@@ -120,13 +120,6 @@
     order_materialsource, order_hurrystatus, order_status, order_remark, order_operator, 
     order_operate_time, order_operate_ip
   </sql>
-  
-  <sql id="Base_Column_List" >
-    id, p_id, product_id, product_orderid, product_planid, product_targetweight, product_realweight, 
-    product_leftweight, product_bakweight, product_irontype, product_irontypeweight, 
-    product_materialname, product_imgid, product_materialsource, product_status, product_remark, 
-    product_operator, product_operate_time, product_operate_ip, furnaceNumber
-  </sql>
   <select id="getProductCount" resultType="long">
 	  SELECT
 	  COUNT( 1 )
@@ -191,6 +184,47 @@
   		<!-- <if test="dto.search_source !=null">
   			and mes_product.product_materialsource = #{dto.search_source}
   		</if> -->
+  	</where>
+  </sql>
+  <!-- 绑定页面分页 -->
+    <select id="countBySearchBindListDto" parameterType="map" resultType="int">
+    select count(mes_product.id)
+  	from mes_product left join mes_order
+  	on mes_product.product_orderid=mes_order.id
+  	left join mes_plan
+  	on mes_product.product_planid=mes_plan.id
+  	left join mes_product parent
+  	on mes_product.p_id=parent.id
+  	<include refid="queryProductBindConditions"></include>
+  </select>
+  
+<select id="getPageBindListBySearchDto" parameterType="map" resultMap="BaseDtoResultMap">
+  	select <include refid="Product_Base_Column_List"></include>,
+  	<include refid="Order_Base_Column_List"></include>,
+  	<include refid="Plan_Base_Column_List"></include>,
+  	parent.id parent_id,parent.product_id parent_productid
+  	from mes_product left join mes_order
+  	on mes_product.product_orderid=mes_order.id
+  	left join mes_plan
+  	on mes_product.product_planid=mes_plan.id
+  	left join mes_product parent
+  	on mes_product.p_id=parent.id
+  	<include refid="queryProductBindConditions"></include>
+  	order by mes_product.product_bakweight desc,mes_product.product_leftweight desc
+  	limit #{page.offset},#{page.pageSize}
+  </select>
+  
+  
+  <sql id="queryProductBindConditions">
+  	<where>
+		  	mes_product.product_status=1 and mes_product.product_leftweight >0
+  		<if test="dto.keyword != null">
+  			and (mes_product.product_id like #{dto.keyword} or mes_product.product_irontype like #{dto.keyword} or mes_product.product_materialname like #{dto.keyword}
+  			or mes_product.product_imgid like #{dto.keyword})
+  		</if>
+  		<if test="dto.search_msource  !=null">
+  			and mes_product.product_materialsource = #{dto.search_msource }
+  		</if>
   	</where>
   </sql>
   
