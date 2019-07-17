@@ -90,7 +90,7 @@ $(function(){
 			} else {
 				$('#productList').html('');
 			}
-			//bindProductClick();//更新操作
+			bindProductClick();//更新操作
 			var pageSize = $("#pageSize").val();
 			var pageNo = $("#productPage .pageNo").val() || 1;
 			//渲染页码
@@ -105,5 +105,19 @@ $(function(){
 			showMessage("获取材料列表", result.msg, false);
 		}
 	}
-	
-})
+	//点击绑定
+	function bindProductClick(){
+		   $(".product-bind").click(function(e) {
+			//阻止默认事件
+         e.preventDefault();
+			//阻止事件传播
+         e.stopPropagation();
+			//获取planid
+         //var leftweight=$(this).attr("data-weight");
+         var productId = $(this).attr("data-id");
+         window.location.href="/product/productBind.page?id="+productId;
+			return;
+     });
+	 }  
+
+});

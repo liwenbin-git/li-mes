@@ -49,6 +49,11 @@ public class MesProductController {
 	public String productBindList() {
 		return FPATH+"/productBindList";
 	}
+	//绑定内容页面
+	@RequestMapping("/productBind.page")
+	public String productBind() {
+		return FPATH+"/productBind";
+	}
 	//添加材料
 	@RequestMapping("/insert.json")
 	//@ResponseBody
