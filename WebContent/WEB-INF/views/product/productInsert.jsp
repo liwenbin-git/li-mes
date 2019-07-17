@@ -24,7 +24,7 @@
 					</a>-->
 				</div> 
 <div id="dialog-plan-form">
-		<form id="productForm">
+		<form id="productForm" action="/product/insert.json" method="post">
 			<table
 				class="table table-striped table-bplaned table-hover dataTable no-footer"
 				role="grid">
@@ -88,9 +88,9 @@
 						value="" class="text ui-widget-content ui-corner-all"></td>
 				</tr>
 				<tr>
-					<td><label >生成材料</label></td>
-					<td><button class="btn btn-info fa fa-check batchInsert-btn"
-					style="margin-bottom: 6px;" type="button">点击按钮</button></td>
+					<td><label for="submit" >生成材料</label></td>
+					<td><input type="submit" value="点击按钮"
+						class="btn btn-info fa fa-check"/></td>
 				</tr>
 			</table>
 		</form>

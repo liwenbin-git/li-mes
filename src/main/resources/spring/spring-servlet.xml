@@ -40,7 +40,7 @@
     <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
 	<!-- 配置json解析器 -->
     <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
-    	<!-- 默认视图解析器 -->
+    <!-- 默认视图解析器 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/" />
         <property name="suffix" value=".jsp" />

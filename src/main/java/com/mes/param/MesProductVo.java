@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.validation.constraints.Min;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.mes.param.MesPlanVo.MesPlanVoBuilder;
 
 import lombok.AllArgsConstructor;

@@ -21,25 +21,37 @@ public class MesProductController {
 	@Resource
 	private ProductService productService;
 	
-	private String FPATH="product/";
+	private String FPATH="product";
 	
-	
+	//添加材料页面
 	@RequestMapping("/productinsert.page")
 	public String productInsertPage() {
-		return FPATH+"productInsert";
+		return FPATH+"/productInsert";
 	}
+	//批量到库页面
 	@RequestMapping("/product.page")
 	public String productPage() {
-		return FPATH+"product";
+		return FPATH+"/product";
 	}
-
-	@RequestMapping("insert.json")
-	@ResponseBody
-	public JsonData insertProduct(MesProductVo mesProductVo) {
+	//到库查询页面
+	@RequestMapping("/productCome.page")
+	public String productCome() {
+		return FPATH+"/productCome";
+	}
+	//钢锭查询页面
+	@RequestMapping("/productIron.page")
+	public String productIron() {
+		return FPATH+"/productIron";
+	}
+	//添加材料
+	@RequestMapping("/insert.json")
+	//@ResponseBody
+	public String insertProduct(MesProductVo mesProductVo) {
 		productService.ProductInsert(mesProductVo);
-		return JsonData.success();
+		return FPATH+"/product";
 		
 	}
+	//分页
 	@RequestMapping("/product.json")
 	@ResponseBody
 	public JsonData productPageList(SearchProductParam param,PageQuery page) {
@@ -52,6 +64,13 @@ public class MesProductController {
 	@ResponseBody
 	public JsonData updateProduct(MesProductVo mesProductVo) {
 		productService.update(mesProductVo);
+		return JsonData.success();
+	}
+	//批量入库
+	@RequestMapping("/productBatchStart.json")
+	@ResponseBody
+	public JsonData productBatchStart(String ids) {
+		productService.batchStart(ids);
 		return JsonData.success();
 	}
 }

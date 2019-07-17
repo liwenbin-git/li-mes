@@ -56,10 +56,9 @@ public class ProductService {
 						.productImgid(mesProductVo.getProductImgid()).productStatus(mesProductVo.getProductStatus())
 						.productRemark(mesProductVo.getProductRemark()).productOperator(mesProductVo.getProductOperator())
 						.productOperateTime(mesProductVo.getProductOperateTime()).productOperateIp(mesProductVo.getProductOperateIp())
-						.furnacenumber(mesProductVo.getFurnacenumber()).build();
-		
-				
-			mesProductMapper.insertSelective(mesProduct);
+						.furnacenumber(mesProductVo.getFurnacenumber()).productMaterialsource(mesProductVo.getProductMaterialsource()).build();
+
+				mesProductMapper.insertSelective(mesProduct);
 			
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -89,10 +88,6 @@ public class ProductService {
 	// vo-param poVo xxParam page SearchOrderParam..
 	// dto 用于自定义的与数据层交互的类 SearchOrderDto
 	// SearchOrderParam--SearchOrderVo
-
-
-
-	///////////////////////////////////////////////////////////////////////////////////////////////
 	// 1 默认生成代码
 	// 2 手工生成代码
 	// id生成器
@@ -239,6 +234,15 @@ public class ProductService {
 		
 	    mesProductMapper.updateByPrimaryKeySelective(product);
 		
+	}
+	
+	//批量启动
+	public void batchStart(String ids) {
+		// TODO Auto-generated method stub
+	if(ids !=null && ids.length()>0) {
+		String[] idsArray=ids.split("&");
+		mesProductCustomerMapper.batchStart(idsArray);
+	}
 	}
 
 }

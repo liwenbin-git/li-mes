@@ -1,6 +1,39 @@
 $(function(){
+	var ids="";
+	$(".batchStart-btn").click(function(){
+		//拿到当前被选中的input-checkbox
+		var checks=$(".batchStart-check:checked");
+		if(checks.length!=null&&checks.length>0){
+			//拿到被选中的订单号
+			//mesorder-id
+			$.each(checks,function(i,check){
+				var id=$(check).closest("tr").attr("data-id");
+				ids+=id+"&";
+			});
+			//拼装ids
+			ids=ids.substr(0,ids.length-1);
+			//发送ajax请求
+			$.ajax({
+				url : "/product/productBatchStart.json",
+				data : {//左面是数据名称-键，右面是值
+					ids:ids
+				},
+				type : 'POST',
+				success : function(result) {
+					loadProductList();
+				}
+			});
+			ids="";
+		}
+	});
 	
-	
+	$(".batchStart-th").click(function(){
+		var checks=$(".batchStart-check");
+		$.each(checks,function(i,input){
+			//状态反选
+			input.checked=input.checked==true?false:true;
+		});
+	});
 	
 	//分页
 	var productMap={};
@@ -43,7 +76,8 @@ $(function(){
 				pageNo:pageNo,
 				pageSize:pageSize,
 				keyword:keyword,
-				//search_status:search_status,
+				search_status:search_status,
+				search_msource:search_msource,
 			},
 			type:"POST",
 			success:function(result){
@@ -66,17 +100,17 @@ $(function(){
 								{
 									"productList" : result.data.data,//{{#orderList}}--List-(result.data.data-list<MesOrder>)
 									"showStatus" : function() {
-										return this.productStatus == 1 ? '已入库'
-												: (this.productStatus == 0 ? '未入库'
+										return this.productStatus == 1 ? '有效'
+												: (this.productStatus == 0 ? '无效'
 														: '删除');
 									},
 									"bold" : function() {
 										return function(text, render) {
 											var status = render(text);
-											if (status == '已入库') {
-												return "<span class='label label-sm label-success'>已入库</span>";
-											} else if (status == '未入库') {
-												return "<span class='label label-sm label-warning'>未入库</span>";
+											if (status == '有效') {
+												return "<span class='label label-sm label-success'>有效</span>";
+											} else if (status == '无效') {
+												return "<span class='label label-sm label-warning'>无效</span>";
 											} else {
 												return "<span class='label'>删除</span>";
 											}
@@ -104,7 +138,7 @@ $(function(){
 					result.data.total > 0 ? result.data.data.length : 0,
 					"productPage", loadProductList);
 		} else {
-			showMessage("获取订单列表", result.msg, false);
+			showMessage("获取材料列表", result.msg, false);
 		}
 	}
 	$(".batchInsert-btn").click(
