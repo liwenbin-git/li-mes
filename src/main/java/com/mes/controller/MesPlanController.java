@@ -20,7 +20,6 @@ public class MesPlanController {
 
 	@Resource
 	private PlanService planService;
-	
 	private static String FPATH="plan/";
 	
 	@RequestMapping("/plan.page")
