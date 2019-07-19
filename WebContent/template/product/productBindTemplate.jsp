@@ -8,8 +8,8 @@
     <td>{{productTargetweight}}</td>
 	<td>
 		<div class="hidden-sm hidden-xs action-buttons">
-			 <a class="blue product-edit" href="#" data-id="{{id}}">
-				  绑定
+			<a class="btn btn-info product-bind" href="#" data-id="{{id}}" data-weight="{{productTargetweight}}">
+				绑定
 			</a>
 		</div>
 	</td>

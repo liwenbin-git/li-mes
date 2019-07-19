@@ -227,5 +227,85 @@
   		</if>
   	</where>
   </sql>
+  <!-- 未绑定列表分页 -->
+   <select id="countBySearchChildBindListDto" parameterType="map" resultType="int">
+    select count(mes_product.id)
+  	from mes_product left join mes_order
+  	on mes_product.product_orderid=mes_order.id
+  	left join mes_plan
+  	on mes_product.product_planid=mes_plan.id
+  	left join mes_product parent
+  	on mes_product.p_id=parent.id
+  	<include refid="queryProductChildBindConditions"></include>
+  </select>
+  <select id="getPageChildBindListBySearchDto" parameterType="map" resultMap="BaseDtoResultMap">
+  	select <include refid="Product_Base_Column_List"></include>,
+  	<include refid="Order_Base_Column_List"></include>,
+  	<include refid="Plan_Base_Column_List"></include>,
+  	parent.id parent_id,parent.product_id parent_productid
+  	from mes_product left join mes_order
+  	on mes_product.product_orderid=mes_order.id
+  	left join mes_plan
+  	on mes_product.product_planid=mes_plan.id
+  	left join mes_product parent
+  	on mes_product.p_id=parent.id
+  	<include refid="queryProductChildBindConditions"></include>
+  	order by mes_product.product_targetweight desc
+  	limit #{page.offset},#{page.pageSize}
+  </select>
+  <sql id="queryProductChildBindConditions">
+  	<where>
+		  	mes_product.product_status=0 
+		  	and 
+		  	mes_product.product_targetweight >0
+		  	and
+		  	mes_product.p_id is null
+		  	and
+		  	(mes_product.product_realweight is null or mes_product.product_realweight=0)
+		  	and 
+		  	(mes_product.product_leftweight is null or mes_product.product_leftweight=0)
+  		<if test="dto.search_msource  !=null">
+  			and mes_product.product_materialsource = #{dto.search_msource }
+  		</if>
+  	</where>
+  </sql>
+  
+  <!-- 已绑定材料分页 -->
+ <select id="countBySearchParentBindListDto" parameterType="map" resultType="int">
+    select count(mes_product.id)
+  	from mes_product left join mes_order
+  	on mes_product.product_orderid=mes_order.id
+  	left join mes_plan
+  	on mes_product.product_planid=mes_plan.id
+  	left join mes_product parent
+  	on mes_product.p_id=parent.id
+  	<include refid="queryProductParentBindListConditions"></include>
+  </select>
+    <!-- 分页-左连接 -->
+  <select id="getPageListBySearchParentBindListDto" parameterType="map" resultMap="BaseDtoResultMap">
+  	select <include refid="Product_Base_Column_List"></include>,
+  	<include refid="Order_Base_Column_List"></include>,
+  	<include refid="Plan_Base_Column_List"></include>,
+  	parent.id parent_id,parent.product_id parent_productid
+  	from mes_product left join mes_order
+  	on mes_product.product_orderid=mes_order.id
+  	left join mes_plan
+  	on mes_product.product_planid=mes_plan.id
+  	left join mes_product parent
+  	on mes_product.p_id=parent.id
+  	<include refid="queryProductParentBindListConditions"></include>
+  	order by mes_product.product_targetweight desc
+  	limit #{page.offset},#{page.pageSize}
+  </select>
+  
+  <sql id="queryProductParentBindListConditions">
+  	<where>
+  		mes_product.product_status = 1
+  		and mes_product.p_id = #{dto.pid}
+  		<if test="dto.search_msource !=null">
+  			and mes_product.product_materialsource = #{dto.search_msource}
+  		</if>
+  	</where>
+  </sql>
   
   </mapper>

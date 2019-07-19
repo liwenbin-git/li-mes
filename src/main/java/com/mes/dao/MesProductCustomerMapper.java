@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.mes.beans.PageQuery;
+import com.mes.beans.PageResult;
 import com.mes.dto.ProductDto;
 import com.mes.dto.SearchProductDto;
 import com.mes.model.MesProduct;
@@ -23,4 +24,11 @@ public interface MesProductCustomerMapper {
 
 	int countBySearchBindListDto(@Param("dto") SearchProductDto dto);
 
+	int countBySearchChildBindListDto(@Param("dto") SearchProductDto dto);
+
+	List<ProductDto> getPageChildBindListBySearchDto(@Param("dto")SearchProductDto dto,@Param("page") PageQuery page);
+
+	int countBySearchParentBindListDto(@Param("dto")SearchProductDto dto);
+
+	List<ProductDto> getPageListBySearchParentBindListDto(@Param("dto")SearchProductDto dto, @Param("page")PageQuery page);
 }

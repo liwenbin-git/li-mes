@@ -16,9 +16,13 @@ import lombok.ToString;
 public class SearchProductParam {
 
 	
-	private String keyword;
-	
-	private Integer search_status ;
-	
+	private Integer pid;
+
 	private String search_msource;
+
+	private String keyword;
+
+	private Integer search_status;
+	
+	
 }
